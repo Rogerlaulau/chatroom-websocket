@@ -12,7 +12,7 @@ WebSocket is a protocol providing full-duplex communication channels over a sing
 Information exchange mode of WebSocket is bidirectional. Means, server can push information to the client (which does not allow direct HTTP).
 
 ## Demo
-![]("chat_room.png" chat history)
+![alt text](chat_room.png "chat history")
 
 ## Summary:
 1. solve the problem of one-way communication between client and server sides by using HTTP

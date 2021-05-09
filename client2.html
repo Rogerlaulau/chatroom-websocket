@@ -1,37 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Socket Thing2</title>
-</head>
-<body>
-    Client 2
-    <button onclick="sendMsg()">Send Msg</button>
-</body>
-<script>
-    //Create WebSocket connection.
-    const socket = new WebSocket('ws://localhost:5000');
+<html>
+    <head>
+        <style>
+            html, body {
+                height: 100%;
+                background-color:rgb(183, 245, 183);
+            }
+            .main_div {
+                height: 86%;
+                width:100%;
+                border-collapse: collapse;
+                background-color:rgb(16, 206, 16);
+            }
+            .bottom{
+                position:absolute;
+                bottom:0;       
+            }
+            h1, h3{
+                text-align:center;
+            }
 
-    //Connection opened
-    socket.addEventListener('open', function(event){
-        console.log('Connected to the WS Server!')
-    });
+            p {
+                font-size: 20px;
+            }
+            * {
+                padding: 0;
+                margin: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <table class="main_div">
+            <h1>Chat Room</h1>
+            <h3>rogerfromhongkong@gmail.com</h3>
+            <tr>
+                <td valign="top">
+                    <p id="messages">Start to chat ...</p>
 
-    //Connection closed
-    socket.addEventListener('close', function (event){
-        console.log('Disconnected from the WS Server!')
-    });
+                </td>
+            </tr>
+            <tr>
+                <td valign="bottom">
+                    <p>dialog box</p>
+                </td>
+                
+            </tr>
+        </table>
+        <div class="bottom">
+            
+            <input type="text" id="textfield" placeholder="Your text here" style="padding: 10px 0px; width: 400px;">
+            <button style="padding: 10px 0px;" onclick="show_outbound_msg()">SEND</button>
+            <h5>© 2021 Roger Lau All rights reserved</h5>
+            
+        </div>
+    </body>
+    <script>
+        //Create WebSocket connection.
+        const socket = new WebSocket('ws://localhost:5000');
 
-    //Listen for messages
-    socket.addEventListener('message', function (event){
-        console.log('Message from server ', event.data);
-    })
+        //Connection opened
+        socket.addEventListener('open', function(event){
+            console.log('Connected to the WS Server!')
+        });
 
-    //Send a msg to the websocket
-    const sendMsg = () => {
-        socket.send('Hello from Client 2!')
-    }
-</script>
+        //Connection closed
+        socket.addEventListener('close', function (event){
+            console.log('Disconnected from the WS Server!')
+        });
+
+        //Listen for messages
+        socket.addEventListener('message', function (event){
+            console.log('Message from server ', event.data);
+            show_inbound_msg(event.data);
+        })
+
+        //Send a msg to the websocket
+        const sendMsg = (mytext) => {
+            socket.send(mytext);
+        }
+
+
+        // function setText(){
+        //     var old_message = document.getElementById("messages").innerText;
+        //     console.log(old_message);
+        //     document.getElementById("messages").innerHTML = old_message+'<p>Roger Ng</p>';
+        // }
+        function show_outbound_msg(){
+            var mymsg = document.createElement("p");
+            const mytext = document.getElementById("textfield").value;
+            mymsg.innerHTML = mytext;
+            //mymsg.style.color = "red";
+            mymsg.style.textAlign = "right";
+            document.getElementById("messages").appendChild(mymsg);
+            document.getElementById("textfield").value = "";
+            sendMsg(mytext);
+        }
+
+        function show_inbound_msg(new_msg){
+            var in_msg = document.createElement("p");
+            in_msg.innerHTML = new_msg;
+            //mymsg.style.color = "blue";
+            //mymsg.style.textAlign = "left";
+            document.getElementById("messages").appendChild(in_msg);
+        }
+        
+        
+        
+        
+    </script>
 </html>
+

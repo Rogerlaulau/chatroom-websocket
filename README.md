@@ -1,4 +1,4 @@
-# websocket
+# WebSocket
 Allow clients to receive message from one another
 
 1. running the app.py script

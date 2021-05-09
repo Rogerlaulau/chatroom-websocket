@@ -8,9 +8,12 @@ async def server(websocket, path):
     connected.add(websocket)
     try:
         async for message in websocket:
+            print(f"message: {message}")
             for conn in connected:
+                #print(f"conn: {conn}")
                 if conn != websocket:
-                    await conn.send(f'Got a new MSG FOR YOU: {message}')
+                    #await conn.send(f'Got a new MSG FOR YOU: {message}')
+                    await conn.send(message)
     finally:
         # Unregister.
         connected.remove(websocket)

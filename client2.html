@@ -4,17 +4,19 @@
         <style>
             html, body {
                 height: 100%;
-                background-color:rgb(183, 245, 183);
+                background-color:rgb(10, 187, 10);
             }
             .main_div {
-                height: 86%;
+                height: 87.5%;
                 width:100%;
                 border-collapse: collapse;
-                background-color:rgb(16, 206, 16);
+                background-color:rgb(222, 245, 222);
+                border: 8px solid #4CAF50;
             }
             .bottom{
                 position:absolute;
-                bottom:0;       
+                bottom:0; 
+                width: 100%;      
             }
             h1, h3{
                 text-align:center;
@@ -22,6 +24,8 @@
 
             p {
                 font-size: 20px;
+                padding-right: 7px;
+                padding-left: 7px;
             }
             * {
                 padding: 0;
@@ -35,22 +39,27 @@
             <h3>rogerfromhongkong@gmail.com</h3>
             <tr>
                 <td valign="top">
-                    <p id="messages">Start to chat ...</p>
-
+                    <p id="joinedtime" style="font-size: 15px; text-align:right"></p>
+                    <p id="messages">Start to chat ...<br><br></p>
                 </td>
             </tr>
             <tr>
                 <td valign="bottom">
-                    <p>dialog box</p>
+                    <h5 style="text-align: center;">© 2021 Roger Lau All rights reserved</h5>
                 </td>
                 
             </tr>
         </table>
         <div class="bottom">
+            <div style="width: 90%; float:left;">
+                <input type="text" id="textfield" placeholder="Type a message" style="padding: 10px 10px; width: 100%; background-color: rgb(245, 245, 222);">
+            </div>
+            <div style="width: 10%; float:left;">
+                <button style="padding: 10px 0px; background-color: rgb(10, 187, 10); width: 100%;" onclick="show_outbound_msg()">SEND</button>
+            </div>
             
-            <input type="text" id="textfield" placeholder="Your text here" style="padding: 10px 0px; width: 400px;">
-            <button style="padding: 10px 0px;" onclick="show_outbound_msg()">SEND</button>
-            <h5>© 2021 Roger Lau All rights reserved</h5>
+            
+            
             
         </div>
     </body>
@@ -61,6 +70,9 @@
         //Connection opened
         socket.addEventListener('open', function(event){
             console.log('Connected to the WS Server!')
+            // show Join time once connected to the Server
+            var d = new Date();
+            document.getElementById("joinedtime").innerHTML = "Joined at "+d.toLocaleString();
         });
 
         //Connection closed
@@ -88,12 +100,21 @@
         function show_outbound_msg(){
             var mymsg = document.createElement("p");
             const mytext = document.getElementById("textfield").value;
-            mymsg.innerHTML = mytext;
-            //mymsg.style.color = "red";
-            mymsg.style.textAlign = "right";
-            document.getElementById("messages").appendChild(mymsg);
-            document.getElementById("textfield").value = "";
-            sendMsg(mytext);
+            if (mytext !== null && mytext !== ''){
+                mymsg.innerHTML = mytext;
+                //mymsg.style.color = "red";
+                mymsg.style.textAlign = "right";
+                document.getElementById("messages").appendChild(mymsg);
+                document.getElementById("textfield").value = "";
+
+                var time_str = document.createElement("p");
+                time_str.innerHTML = new Date().toLocaleTimeString()+" √√";
+                time_str.style.color = "gray";
+                time_str.style.textAlign = "right";
+                time_str.style.fontSize = "12px";
+                document.getElementById("messages").appendChild(time_str);
+                sendMsg(mytext);
+            }
         }
 
         function show_inbound_msg(new_msg){
@@ -102,6 +123,13 @@
             //mymsg.style.color = "blue";
             //mymsg.style.textAlign = "left";
             document.getElementById("messages").appendChild(in_msg);
+
+            var time_str = document.createElement("p");
+            time_str.innerHTML = new Date().toLocaleTimeString();
+            time_str.style.color = "gray";
+            //mymsg.style.textAlign = "left";
+            time_str.style.fontSize = "12px";
+            document.getElementById("messages").appendChild(time_str);
         }
         
         
